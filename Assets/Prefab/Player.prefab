@@ -103,12 +103,12 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_GravityScale: 2
+  m_Material: {fileID: 6200000, guid: 06df834aecb3d89439c98984ea3d91c6, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &1302015471836377346
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -269,4 +269,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 046079c809db91b4783f91c6411d4a7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  aimDir: {x: 0, y: 0}
+  isRotate: 0
+  moveSpeed: 3
+  jumpPower: 8
+  rayLength: 0.3
+  aimoffset: 0.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  AnchorPrefab: {fileID: 1513083771031994395, guid: 7795f4acd0433ba4ba54c5f674ee7847, type: 3}

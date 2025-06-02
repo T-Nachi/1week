@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: Effect Profile
+  m_Name: Vignette Profile
   m_EditorClassIdentifier: 
   components:
-  - {fileID: 5139365440801959151}
---- !u!114 &5139365440801959151
+  - {fileID: 5611711381823816227}
+--- !u!114 &5611711381823816227
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -28,17 +28,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   color:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {r: 0, g: 0, b: 0, a: 1}
   center:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {x: 0.5, y: 0.5}
   intensity:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   smoothness:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.2
   rounded:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0

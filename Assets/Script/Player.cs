@@ -23,7 +23,6 @@ public class Player : MonoBehaviour
     float defGravity;
 
     //他オブジェクト情報
-    Transform cameraTransform;
     public LayerMask groundLayer;
     public GameObject AnchorPrefab;
     GameObject anchor;
@@ -36,7 +35,6 @@ public class Player : MonoBehaviour
     void Start()
     {
         stage = GameObject.Find("Stage").transform;
-        cameraTransform = GameObject.Find("Main Camera").transform;
         rb = GetComponent<Rigidbody2D>();
         defGravity = rb.gravityScale;
     }

@@ -18,7 +18,7 @@ public class GravitySwich : MonoBehaviour
         stage = GameObject.Find("Stage");
         if (stage != null)
         {
-            stageS = stageS.GetComponent<Stage>();
+            stageS = stage.GetComponent<Stage>();
         }
     }
 

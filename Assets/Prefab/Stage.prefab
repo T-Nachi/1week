@@ -57,6 +57,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7586063235335050254}
     m_Modifications:
+    - target: {fileID: -6659531369347023424, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6659531369347023424, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6659531369347023424, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2399014233951904526, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
       propertyPath: m_Name
       value: Ground
@@ -131,6 +143,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7586063235335050254}
     m_Modifications:
+    - target: {fileID: -6659531369347023424, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6659531369347023424, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6659531369347023424, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2399014233951904526, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
       propertyPath: m_Name
       value: LeftWall
@@ -201,6 +225,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7586063235335050254}
     m_Modifications:
+    - target: {fileID: -6659531369347023424, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6659531369347023424, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6659531369347023424, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2399014233951904526, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
       propertyPath: m_Name
       value: Ground (2)
@@ -271,6 +307,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7586063235335050254}
     m_Modifications:
+    - target: {fileID: -6659531369347023424, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6659531369347023424, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6659531369347023424, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2399014233951904526, guid: 63f4cb7a3c25d264aa2d9d36bdfad998, type: 3}
       propertyPath: m_Name
       value: Ground (3)

@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: -2505367706817124361}
   - component: {fileID: 997079979043049548}
   - component: {fileID: 814116125511874520}
+  - component: {fileID: -9215891301823300162}
   m_Layer: 3
-  m_Name: testBox
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -128,7 +129,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -146,3 +147,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34e169f2b5e8eff43bb4ecacf726b6d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-9215891301823300162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2099579796375790971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2b2ea2b8b94a614eae528685e8b17dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 6710347745773044200, guid: 6f2c4783465c03745b313adcdfe737c2, type: 3}
+  fireInterval: 50
+  shootDirection: 3
+  offset: 1

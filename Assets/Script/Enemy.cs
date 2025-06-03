@@ -8,6 +8,9 @@ public class Enemy : MonoBehaviour
     public int fireInterval = 50;
     public GameObject particle;
 
+    public AudioClip attackSE;
+    AudioSource audioSource;
+
     public enum Direction { Up, Down, Left, Right }
     public Direction shootDirection = Direction.Right;
 
@@ -21,6 +24,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         stage = GameObject.Find("Stage").transform;
     }
 
@@ -37,6 +41,7 @@ public class Enemy : MonoBehaviour
 
     void Shoot()
     {
+        audioSource.PlayOneShot(attackSE);
         GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0, 0, 0), stage);
 
         // ローカル方向で弾を撃つ（ステージの回転を考慮しない）

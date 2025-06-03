@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -36,13 +37,23 @@ public class Player : MonoBehaviour
     public GameObject particle;
     public GameObject particleE;
 
-
     Rigidbody2D rb;
 
+    public AudioClip jumpSE;
+    public AudioClip arrowSE;
+    public AudioClip hitSE;
+    public AudioClip attackSE;
+    AudioSource audioSource;
+
+    void Awake()
+    {
+        Application.targetFrameRate = 60; // 
+    }
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         volume = GameObject.Find("Vinnet").GetComponent<Volume>();
         if (volume != null) { vignetteS = volume.GetComponent<Vignette>(); }
         stage = GameObject.Find("Stage");
@@ -97,6 +108,7 @@ public class Player : MonoBehaviour
     {
         if (isGround && jumpTrigger)
         {
+            audioSource.PlayOneShot(jumpSE);
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
         }
     }
@@ -191,6 +203,7 @@ public class Player : MonoBehaviour
             rb.velocity = Vector2.zero;
             Time.timeScale = 1f;
             isShoot = true;
+            audioSource.PlayOneShot(arrowSE);
             isAim = false;
         }
     }
@@ -213,11 +226,13 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
+            audioSource.PlayOneShot(hitSE);
             Instantiate(particle, transform.position, Quaternion.identity,stage.transform);
             Destroy(gameObject);
         }
         if (collision.gameObject.tag == "KillEnemy")
         {
+            audioSource.PlayOneShot(attackSE);
             Instantiate(particleE, transform.position, Quaternion.identity,stage.transform);
             rb.velocity = new Vector2(rb.velocity.x, jumpPower / 2);
         }

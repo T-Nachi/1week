@@ -162,5 +162,6 @@ MonoBehaviour:
   bulletPrefab: {fileID: 6710347745773044200, guid: 6f2c4783465c03745b313adcdfe737c2, type: 3}
   fireInterval: 210
   particle: {fileID: 8442709375295107337, guid: ba4b9801016bd7049aac814063cd5054, type: 3}
+  attackSE: {fileID: 8300000, guid: 8d5f968627109c04b8316583a80aaac4, type: 3}
   shootDirection: 2
   offset: 1

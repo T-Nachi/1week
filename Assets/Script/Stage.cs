@@ -15,8 +15,12 @@ public class Stage : MonoBehaviour
     Quaternion targetRotation;
     public bool isRotating = false;
 
+    public AudioClip rotateSE;
+    AudioSource audioSource;
+
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         player = GameObject.Find("Player");
         if (player != null)
         {
@@ -34,6 +38,7 @@ public class Stage : MonoBehaviour
 
             if (canRotate && playerS.isRotate && !playerS.isShoot)
             {
+                audioSource.PlayOneShot(rotateSE);
                 StartRotation(playerS.aimDir);
                 canRotate = false;
             }

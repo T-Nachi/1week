@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - Arrow
   - EBullet
+  - KillEnemy
   layers:
   - Default
   - TransparentFX

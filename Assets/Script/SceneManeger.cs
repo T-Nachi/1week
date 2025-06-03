@@ -90,7 +90,7 @@ public class SceneManeger : MonoBehaviour
     private IEnumerator DelayedRotateBack()
     {
         yield return null; // 1フレーム待機してから回転開始
-        yield return RotateOverTime(-180f, rotationDuration);
+        yield return RotateOverTime(180f, rotationDuration);
     }
 
     private IEnumerator RotateOverTime(float angle, float duration)

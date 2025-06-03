@@ -30,9 +30,15 @@ public class SceneManeger : MonoBehaviour
         if (comingFromRetry)
         {
             cameraPivot.transform.rotation = Quaternion.Euler(0, 0, 180f);
-            StartCoroutine(DelayedRotateBack());
-            comingFromRetry = false;
+            StartCoroutine(DelayedRotateBackAndResetFlag());
         }
+    }
+
+    private IEnumerator DelayedRotateBackAndResetFlag()
+    {
+        yield return null;
+        yield return RotateOverTime(180f, rotationDuration);
+        comingFromRetry = false;
     }
 
     void Update()
@@ -56,19 +62,15 @@ public class SceneManeger : MonoBehaviour
     {
         if (cameraPivot != null) return;
 
-        // 左下のワールド座標を取得（nearClipPlane ではなくカメラ位置からの距離で）
         Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, mainCamera.transform.position.z * -1));
 
-        // ピボット作成（左下を回転の軸に）
         cameraPivot = new GameObject("CameraPivot");
         cameraPivot.transform.position = bottomLeft;
         DontDestroyOnLoad(cameraPivot);
 
-        // カメラのワールド位置とピボットの差分をローカルに変換
         mainCamera.transform.SetParent(cameraPivot.transform);
         mainCamera.transform.localPosition = mainCamera.transform.position - bottomLeft;
     }
-
 
     public void Retry()
     {
@@ -83,7 +85,6 @@ public class SceneManeger : MonoBehaviour
 
     private IEnumerator RetryWithRotation()
     {
-        // ★ここでピボット位置を左下に移動（画面の左下）
         Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, mainCamera.nearClipPlane));
         cameraPivot.transform.position = new Vector3(bottomLeft.x, bottomLeft.y, cameraPivot.transform.position.z);
 
@@ -92,7 +93,6 @@ public class SceneManeger : MonoBehaviour
         Destroy(cameraPivot);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -103,12 +103,6 @@ public class SceneManeger : MonoBehaviour
         if (goal != null) goalS = goal.GetComponent<Goal>();
 
         SetupPivot();
-    }
-
-    private IEnumerator DelayedRotateBack()
-    {
-        yield return null;
-        yield return RotateOverTime(180f, rotationDuration);
     }
 
     private IEnumerator RotateOverTime(float angle, float duration)
@@ -127,17 +121,16 @@ public class SceneManeger : MonoBehaviour
 
         cameraPivot.transform.rotation = endRot;
     }
-
     private IEnumerator ZoomToGoalAndLoadNextScene()
     {
         Vector3 startPos = cameraPivot.transform.position;
-        Vector3 targetPos = goal.transform.position;
+
+        Vector3 targetPos = goalS != null ? goalS.GetPositionIgnoringParentRotation() : goal.transform.position;
         targetPos.z = startPos.z;
 
         float moveDuration = 1.0f;
         float zoomDuration = 1.0f;
 
-        // ゴールに寄る
         float elapsed = 0f;
         while (elapsed < moveDuration)
         {
@@ -147,9 +140,8 @@ public class SceneManeger : MonoBehaviour
             yield return null;
         }
 
-        // ズームイン
         float startSize = mainCamera.orthographicSize;
-        float targetSize = 0.3f; // より狭くズーム
+        float targetSize =  0.3f;
         elapsed = 0f;
         while (elapsed < zoomDuration)
         {
@@ -159,9 +151,9 @@ public class SceneManeger : MonoBehaviour
             yield return null;
         }
 
-        // 次のシーンへ（インデックスで遷移）
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
+
 
     private void OnDestroy()
     {

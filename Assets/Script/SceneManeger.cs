@@ -6,25 +6,30 @@ public class SceneManeger : MonoBehaviour
 {
     public float rotationDuration = 1f;
 
-    private GameObject cameraPivot;
     private Camera mainCamera;
+    private GameObject cameraPivot;
     private GameObject player;
 
-    private bool retryScheduled = false;
     private bool rotatingBack = false;
+    private bool retryScheduled = false;
+    private static bool comingFromRetry = false;
 
     void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        Initialize();
-    }
 
-    void Initialize()
-    {
-        player = GameObject.Find("Player");
         mainCamera = Camera.main;
+        player = GameObject.Find("Player");
 
         SetupPivot();
+
+        if (comingFromRetry)
+        {
+            // カメラを180°に設定しておき、後で戻す
+            cameraPivot.transform.rotation = Quaternion.Euler(0, 0, 180f);
+            StartCoroutine(DelayedRotateBack());
+            comingFromRetry = false;
+        }
     }
 
     void Update()
@@ -36,16 +41,15 @@ public class SceneManeger : MonoBehaviour
         }
     }
 
-    void SetupPivot()
+    private void SetupPivot()
     {
-        if (cameraPivot == null)
-        {
-            Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, mainCamera.nearClipPlane));
+        if (cameraPivot != null) return;
 
-            cameraPivot = new GameObject("CameraPivot");
-            cameraPivot.transform.position = bottomLeft;
-            DontDestroyOnLoad(cameraPivot);
-        }
+        Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, mainCamera.nearClipPlane));
+
+        cameraPivot = new GameObject("CameraPivot");
+        cameraPivot.transform.position = bottomLeft;
+        DontDestroyOnLoad(cameraPivot);
 
         mainCamera.transform.SetParent(cameraPivot.transform);
     }
@@ -55,58 +59,41 @@ public class SceneManeger : MonoBehaviour
         StartCoroutine(RetryWithRotation());
     }
 
-    IEnumerator RetryAfterDelay(float delay)
+    private IEnumerator RetryAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         Retry();
     }
 
-    IEnumerator RetryWithRotation()
+    private IEnumerator RetryWithRotation()
     {
         yield return RotateOverTime(180f, rotationDuration);
 
-        rotatingBack = true;
+        // 次のシーンで逆回転するフラグを立てる
+        comingFromRetry = true;
 
-        // カメラ親子関係を切り離して破棄
-        mainCamera.transform.SetParent(null);
+        // カメラとピボット削除（次シーンで新たに作るため）
         Destroy(cameraPivot);
-
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // 古いカメラが残っている場合は削除（保険）
-        var cameras = GameObject.FindGameObjectsWithTag("MainCamera");
-        if (cameras.Length > 1)
-        {
-            foreach (var cam in cameras)
-            {
-                if (cam != Camera.main.gameObject)
-                    Destroy(cam);
-            }
-        }
-
         player = GameObject.Find("Player");
         mainCamera = Camera.main;
 
         SetupPivot();
 
-        if (rotatingBack)
-        {
-            cameraPivot.transform.rotation = Quaternion.Euler(0, 0, 180f);
-            StartCoroutine(DelayedRotateBack());
-            rotatingBack = false;
-        }
+        // comingFromRetry で回転済みなのでここでは回さない
     }
 
-    IEnumerator DelayedRotateBack()
+    private IEnumerator DelayedRotateBack()
     {
-        yield return null;
+        yield return null; // 1フレーム待機してから回転開始
         yield return RotateOverTime(-180f, rotationDuration);
     }
 
-    IEnumerator RotateOverTime(float angle, float duration)
+    private IEnumerator RotateOverTime(float angle, float duration)
     {
         Quaternion startRot = cameraPivot.transform.rotation;
         Quaternion endRot = startRot * Quaternion.Euler(0, 0, angle);
@@ -123,7 +110,7 @@ public class SceneManeger : MonoBehaviour
         cameraPivot.transform.rotation = endRot;
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }

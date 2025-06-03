@@ -49,6 +49,28 @@ public class SceneManeger : MonoBehaviour
             retryScheduled = true;
             Retry();
         }
+        if (player != null)
+        {
+            Player playerS = player.GetComponent<Player>();
+            if (playerS.isReset && !retryScheduled)
+            {
+                retryScheduled = true;
+                StartCoroutine(FadeInAndGoToScene0());
+            }
+        }
+    }
+
+    private IEnumerator FadeInAndGoToScene0()
+    {
+        Fead fade = FindObjectOfType<Fead>();
+        if (fade != null)
+        {
+            fade.SetColor(Color.white); // ← 不透明な黒にしてから
+            fade.gameObject.SetActive(true);
+            yield return StartCoroutine(fade.FadeIn()); // 新しい FadeIn() を作る必要あり
+        }
+
+        SceneManager.LoadScene(0); // シーン0へ遷移
     }
 
     private void SetupPivot()
@@ -73,11 +95,6 @@ public class SceneManeger : MonoBehaviour
         }
     }
 
-    private IEnumerator RetryAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        Retry();
-    }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {

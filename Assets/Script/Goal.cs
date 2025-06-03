@@ -7,6 +7,9 @@ public class Goal : MonoBehaviour
     GameObject player;
     Player playerS;
 
+    GameObject stage;
+    Stage stageS;
+
     public string targetName = "Enemy";
     public bool allEnemiesDefeated = false;
 
@@ -23,6 +26,8 @@ public class Goal : MonoBehaviour
         {
             playerS = player.GetComponent<Player>();
         }
+        stage = GameObject.Find("Stage");
+        if(stage != null) stageS = stage.GetComponent<Stage>();
         isAvtive = false;
         isClear = false;
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -43,8 +48,8 @@ public class Goal : MonoBehaviour
 
         allEnemiesDefeated = (count == 0);
 
-        if (playerS != null) {
-            if (allEnemiesDefeated && playerS.isGround)
+        if (playerS != null && stageS != null) {
+            if (allEnemiesDefeated && playerS.isGround && !stageS.isRotating)
             {
                 isAvtive = true;
             }

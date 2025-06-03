@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class Fead : MonoBehaviour
@@ -36,7 +37,7 @@ public class Fead : MonoBehaviour
         StartCoroutine(FadeInAndRetry());
     }
 
-    private void SetColor(Color color)
+    public void SetColor(Color color)
     {
         color.a = 1f;
         fadeImage.color = color;
@@ -74,5 +75,20 @@ public class Fead : MonoBehaviour
 
         SceneManeger.comingFromRetry = true;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public IEnumerator FadeIn()
+    {
+        float elapsed = 0f;
+        Color c = new Color(1f, 1f, 1f, 0f); // 
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            c.a = t;
+            fadeImage.color = c;
+            yield return null;
+        }
     }
 }

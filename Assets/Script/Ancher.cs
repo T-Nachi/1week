@@ -69,7 +69,7 @@ public class Ancher : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!hitSomething && other.tag != "Player")
+        if (!hitSomething && other.tag != "Player" && other.tag != "Goal")
         {
             isHit = true;
         }

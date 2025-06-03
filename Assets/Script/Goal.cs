@@ -24,6 +24,7 @@ public class Goal : MonoBehaviour
             playerS = player.GetComponent<Player>();
         }
         isAvtive = false;
+        isClear = false;
         spriteRenderer = GetComponent<SpriteRenderer>();
 
     }
@@ -40,10 +41,8 @@ public class Goal : MonoBehaviour
             }
         }
 
-        if (count == 0 && !allEnemiesDefeated)
-        {
-            allEnemiesDefeated = true;
-        }
+        allEnemiesDefeated = (count == 0);
+
         if (playerS != null) {
             if (allEnemiesDefeated && playerS.isGround)
             {
@@ -70,7 +69,7 @@ public class Goal : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && isAvtive)
         {
             isClear = true;
         }

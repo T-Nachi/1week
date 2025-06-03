@@ -70,7 +70,6 @@ public class Enemy : MonoBehaviour
         }
         if (hitAncher && collision.gameObject.tag == "Player")
         {
-            Instantiate(particle, transform.position, Quaternion.identity, stage);
             Destroy(gameObject);
         }
     }

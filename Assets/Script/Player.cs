@@ -32,6 +32,9 @@ public class Player : MonoBehaviour
     GameObject stage;
     Stage stageS;
     private Rigidbody2D standingOnRb;
+    public GameObject particle;
+    public GameObject particleE;
+
 
     Rigidbody2D rb;
 
@@ -203,10 +206,12 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
+            Instantiate(particle, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
         if (collision.gameObject.tag == "KillEnemy")
         {
+            Instantiate(particleE, collision.transform.position, Quaternion.identity);
             rb.velocity = new Vector2(rb.velocity.x, jumpPower / 2);
         }
     }

@@ -10,7 +10,7 @@ public class Ancher : MonoBehaviour
     public float pullSpeed = 10f;
     public bool isShoot = false;
     public bool isRotate;
-
+    bool isHit;
 
     bool isMove;
     private Vector2 startPosition;
@@ -18,6 +18,8 @@ public class Ancher : MonoBehaviour
     private bool hitSomething = false;
     private bool returning = false;
     private Rigidbody2D rb;
+    int count;
+
 
     void Start()
     {
@@ -31,7 +33,6 @@ public class Ancher : MonoBehaviour
     {
         if (!isShoot)
         {
-
             startPosition = transform.position;
         }
         else
@@ -53,19 +54,31 @@ public class Ancher : MonoBehaviour
                 StartCoroutine(ReturnToPlayer());
             }
         }
+
+        if (isHit && isShoot)
+        {
+            hitSomething = true;
+            isRotate = true;
+            rb.velocity = Vector2.zero;
+            StartCoroutine(PullPlayerToPoint());
+            isHit = false;
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (isShoot)
+        if (!hitSomething && other.tag != "Player")
         {
-            if (!hitSomething && other.gameObject != player.gameObject)
-            {
-                hitSomething = true;
-                isRotate = true;
-                rb.velocity = Vector2.zero;
-                StartCoroutine(PullPlayerToPoint());
-            }
+            isHit = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (!hitSomething && collision.tag != "Player")
+        {
+            isHit = false;
         }
     }
 
@@ -74,15 +87,27 @@ public class Ancher : MonoBehaviour
         Rigidbody2D playerRb = player.GetComponent<Rigidbody2D>();
         if (playerRb == null) yield break;
 
-        while (Vector2.Distance(player.position, transform.position) > 0.5f)
+        int frameCount = 0;
+        int maxFrames = Mathf.RoundToInt(0.5f / Time.fixedDeltaTime); 
+
+        while (Vector2.Distance(player.position, transform.position) > 0.1f)
         {
             Vector2 pullDir = (transform.position - player.position).normalized;
             playerRb.velocity = pullDir * pullSpeed;
-            yield return null;
+
+            frameCount++;
+            if (frameCount > maxFrames)
+            {
+                Debug.Log("éûä‘êÿÇÍÇ≈ÉAÉìÉJÅ[ÇîjâÛ");
+                break;
+            }
+
+            yield return new WaitForFixedUpdate();
         }
 
         playerRb.velocity = Vector2.zero;
         Destroy(gameObject);
+
     }
 
     private IEnumerator ReturnToPlayer()

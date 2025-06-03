@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
 
     //フラグ
     bool jumpTrigger;
-    bool isGround;
+    public bool isGround;
     bool isAim;
     public bool isShoot;
     public bool isRotate;
@@ -29,7 +29,8 @@ public class Player : MonoBehaviour
     public LayerMask groundLayer;
     public GameObject AnchorPrefab;
     GameObject anchor;
-    Transform stage;
+    GameObject stage;
+    Stage stageS;
     private Rigidbody2D standingOnRb;
 
 
@@ -41,7 +42,11 @@ public class Player : MonoBehaviour
     {
         volume = GameObject.Find("Vinnet").GetComponent<Volume>();
         if (volume != null) { vignetteS = volume.GetComponent<Vignette>(); }
-        stage = GameObject.Find("Stage").transform;
+        stage = GameObject.Find("Stage");
+        if (stage != null)
+        {
+            stageS = stage.GetComponent<Stage>();
+        }
         rb = GetComponent<Rigidbody2D>();
         defGravity = rb.gravityScale;
     }
@@ -49,27 +54,33 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
-        GroundInfo();
+        if (stageS != null)
+        {
+            if (!stageS.isRotating)
+            {
+                GroundInfo();
 
-        if (standingOnRb != null)
-        {
-            // 動く床（弾）の速度をプレイヤーの位置に反映（Time.fixedDeltaTimeで補正）
-            rb.position += standingOnRb.velocity * Time.fixedDeltaTime;
-        }
+                if (standingOnRb != null)
+                {
+                    // 動く床（弾）の速度をプレイヤーの位置に反映（Time.fixedDeltaTimeで補正）
+                    rb.position += standingOnRb.velocity * Time.fixedDeltaTime;
+                }
 
-        if (!isShoot)
-        {
-            if (isGround && inputDir == Vector2.down) inputDir = Vector2.zero;
-            rb.gravityScale = defGravity;
-            if (inputDir != Vector2.zero) aimDir = inputDir;
-            if (isAim) Aim();
-            else { if (vignetteS != null) { vignetteS.triggerVignette = false; } }
-            Move();
-            Jump();
-        }
-        else
-        {
-            Shoot();
+                if (!isShoot)
+                {
+                    if (isGround && inputDir == Vector2.down) inputDir = Vector2.zero;
+                    rb.gravityScale = defGravity;
+                    if (inputDir != Vector2.zero) aimDir = inputDir;
+                    if (isAim) Aim();
+                    else { if (vignetteS != null) { vignetteS.triggerVignette = false; } }
+                    Move();
+                    Jump();
+                }
+                else
+                {
+                    Shoot();
+                }
+            }
         }
     }
 
@@ -106,7 +117,7 @@ public class Player : MonoBehaviour
         // 回転を設定
         Quaternion rotation = Quaternion.Euler(0, 0, angle - 90);
 
-        if (anchor == null) anchor = Instantiate(AnchorPrefab, transform.position + (Vector3)aimDir * aimoffset, rotation, stage);
+        if (anchor == null) anchor = Instantiate(AnchorPrefab, transform.position + (Vector3)aimDir * aimoffset, rotation, stage.transform);
         else
         {
             anchor.transform.position = transform.position + (Vector3)aimDir * aimoffset;
@@ -183,7 +194,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("EBullet"))
+        if (collision.gameObject.CompareTag("EBullet") && collision.transform.position.y < transform.position.y)
         {
             standingOnRb = collision.gameObject.GetComponent<Rigidbody2D>();
         }
@@ -199,7 +210,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("EBullet"))
+        if (collision.gameObject.CompareTag("EBullet") && collision.transform.position.y < transform.position.y)
         {
             standingOnRb = null;
         }

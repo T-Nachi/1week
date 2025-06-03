@@ -9,10 +9,12 @@ public class SceneManeger : MonoBehaviour
     private Camera mainCamera;
     private GameObject cameraPivot;
     private GameObject player;
+    private GameObject goal;
+    private Goal goalS;
 
-    private bool rotatingBack = false;
     private bool retryScheduled = false;
     private static bool comingFromRetry = false;
+    private bool isZooming = false;
 
     void Start()
     {
@@ -20,12 +22,13 @@ public class SceneManeger : MonoBehaviour
 
         mainCamera = Camera.main;
         player = GameObject.Find("Player");
+        goal = GameObject.Find("Goal");
+        if (goal != null) goalS = goal.GetComponent<Goal>();
 
         SetupPivot();
 
         if (comingFromRetry)
         {
-            // カメラを180°に設定しておき、後で戻す
             cameraPivot.transform.rotation = Quaternion.Euler(0, 0, 180f);
             StartCoroutine(DelayedRotateBack());
             comingFromRetry = false;
@@ -34,6 +37,12 @@ public class SceneManeger : MonoBehaviour
 
     void Update()
     {
+        if (!isZooming && goalS != null && goalS.isClear)
+        {
+            isZooming = true;
+            StartCoroutine(ZoomToGoalAndLoadNextScene());
+        }
+
         if (!retryScheduled && player == null)
         {
             retryScheduled = true;
@@ -45,14 +54,14 @@ public class SceneManeger : MonoBehaviour
     {
         if (cameraPivot != null) return;
 
-        Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, mainCamera.nearClipPlane));
-
+        // カメラの現在位置を基準にピボット作成
         cameraPivot = new GameObject("CameraPivot");
-        cameraPivot.transform.position = bottomLeft;
+        cameraPivot.transform.position = mainCamera.transform.position;
         DontDestroyOnLoad(cameraPivot);
 
-        mainCamera.transform.SetParent(cameraPivot.transform);
+        mainCamera.transform.SetParent(cameraPivot.transform, true); // ワールド座標維持
     }
+
 
     public void Retry()
     {
@@ -68,11 +77,7 @@ public class SceneManeger : MonoBehaviour
     private IEnumerator RetryWithRotation()
     {
         yield return RotateOverTime(180f, rotationDuration);
-
-        // 次のシーンで逆回転するフラグを立てる
         comingFromRetry = true;
-
-        // カメラとピボット削除（次シーンで新たに作るため）
         Destroy(cameraPivot);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
@@ -82,15 +87,16 @@ public class SceneManeger : MonoBehaviour
         player = GameObject.Find("Player");
         mainCamera = Camera.main;
 
-        SetupPivot();
+        goal = GameObject.Find("Goal");
+        if (goal != null) goalS = goal.GetComponent<Goal>();
 
-        // comingFromRetry で回転済みなのでここでは回さない
+        SetupPivot();
     }
 
     private IEnumerator DelayedRotateBack()
     {
-        yield return null; // 1フレーム待機してから回転開始
-        yield return RotateOverTime(180f, rotationDuration);
+        yield return null; // 1フレーム待つ
+        yield return RotateOverTime(180f, rotationDuration); // 同じ向きに回転
     }
 
     private IEnumerator RotateOverTime(float angle, float duration)
@@ -109,6 +115,28 @@ public class SceneManeger : MonoBehaviour
 
         cameraPivot.transform.rotation = endRot;
     }
+
+    private IEnumerator ZoomToGoalAndLoadNextScene()
+    {
+        Vector3 startPos = cameraPivot.transform.position;
+        Vector3 targetPos = goal.transform.position;
+        targetPos.z = startPos.z; // カメラのZ値は維持
+
+        float duration = 1.5f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.SmoothStep(0f, 1f, elapsed / duration);
+            cameraPivot.transform.position = Vector3.Lerp(startPos, targetPos, t);
+            yield return null;
+        }
+
+        // シーン遷移（必要に応じて変更）
+        SceneManager.LoadScene("NextSceneName");
+    }
+
 
     private void OnDestroy()
     {

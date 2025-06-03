@@ -66,6 +66,7 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.tag == "Arrow")
         {
             hitAncher = true;
+            gameObject.tag = "KillEnemy";
         }
         if (hitAncher && collision.gameObject.tag == "Player")
         {

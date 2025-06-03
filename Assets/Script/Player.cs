@@ -33,7 +33,6 @@ public class Player : MonoBehaviour
     Stage stageS;
     private Rigidbody2D standingOnRb;
 
-
     Rigidbody2D rb;
 
 
@@ -203,6 +202,10 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Enemy")
+        {
+            Destroy(gameObject);
+        }
+        if (collision.gameObject.tag == "KillEnemy")
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower / 2);
         }

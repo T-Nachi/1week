@@ -75,6 +75,14 @@ public class Goal : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player" && isAvtive)
+        {
+            isClear = true;
+        }
+    }
+
     public Vector3 GetPositionIgnoringParentRotation()
     {
         if (transform.parent == null)

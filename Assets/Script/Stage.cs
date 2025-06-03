@@ -6,11 +6,11 @@ public class Stage : MonoBehaviour
 {
     GameObject player;
     Player playerS;
+    Rigidbody2D pRB;
+
     bool canRotate;
 
     public float rotationSpeed = 180f; // 回転速度（度/秒）
-
-    TrailRenderer pTrail;
 
     Quaternion targetRotation;
     public bool isRotating = false;
@@ -20,7 +20,7 @@ public class Stage : MonoBehaviour
         player = GameObject.Find("Player");
         if (player != null)
         {
-            pTrail = player.GetComponent<TrailRenderer>();
+            pRB = player.GetComponent<Rigidbody2D>();
             playerS = player.GetComponent<Player>();
         }
         targetRotation = transform.rotation; // 初期回転
@@ -32,7 +32,7 @@ public class Stage : MonoBehaviour
         {
             if (!playerS.isRotate) canRotate = true;
 
-            if (canRotate && playerS.isRotate)
+            if (canRotate && playerS.isRotate && !playerS.isShoot)
             {
                 StartRotation(playerS.aimDir);
                 canRotate = false;
@@ -41,8 +41,7 @@ public class Stage : MonoBehaviour
 
         if (isRotating)
         {
-            if (pTrail != null) pTrail.enabled = false;
-
+            if (pRB)pRB.velocity = Vector3.zero;
             transform.rotation = Quaternion.RotateTowards(
                 transform.rotation,
                 targetRotation,
@@ -54,10 +53,6 @@ public class Stage : MonoBehaviour
                 transform.rotation = targetRotation;
                 isRotating = false;
             }
-        }
-        else
-        {
-            if (pTrail != null) pTrail.enabled = true;
         }
     }
 

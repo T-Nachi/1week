@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     bool jumpTrigger;
     bool isGround;
     bool isAim;
-    bool isShoot;
+    public bool isShoot;
     public bool isRotate;
 
     //ÉpÉâÉÅÅ[É^
@@ -129,9 +129,6 @@ public class Player : MonoBehaviour
         }
         else
         {
-            if (isRotate)
-            {
-            }
             isShoot = false;
         }
     }

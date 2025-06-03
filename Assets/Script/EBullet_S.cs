@@ -9,6 +9,8 @@ public class EBullet_S : MonoBehaviour
     private Rigidbody2D rb;
     private Transform parent;
 
+    bool isStop;
+
     private bool directionSet = false;
 
     void Awake()
@@ -36,7 +38,14 @@ public class EBullet_S : MonoBehaviour
         {
             // êeÇÃâÒì]ÇîΩâfÇµÇΩÉèÅ[ÉãÉhï˚å¸Ç…ïœä∑
             Vector2 worldDir = parent.rotation * baseDirection;
-            rb.velocity = worldDir.normalized * speed;
+            if (!isStop)
+            {
+                rb.velocity = worldDir.normalized * speed;
+            }
+            else
+            {
+                rb.velocity = Vector2.zero;
+            }
         }
         else
         {
@@ -70,5 +79,18 @@ public class EBullet_S : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        else if (collision.gameObject.tag == "Arrow")
+        {
+            isStop = true;
+        }
     }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Arrow")
+        {
+            isStop = false;
+        }
+    }
+
 }

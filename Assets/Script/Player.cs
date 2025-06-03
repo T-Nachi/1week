@@ -33,7 +33,6 @@ public class Player : MonoBehaviour
     private Rigidbody2D standingOnRb;
 
 
-
     Rigidbody2D rb;
 
 
@@ -94,7 +93,7 @@ public class Player : MonoBehaviour
 
         if (!isGround)
         {
-            Time.timeScale = 0.3f;
+            Time.timeScale = 0.2f;
             if (vignetteS != null) { vignetteS.triggerVignette = true; }
         }
         else
@@ -190,6 +189,14 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("EBullet"))
         {
             standingOnRb = collision.gameObject.GetComponent<Rigidbody2D>();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpPower / 2);
         }
     }
 

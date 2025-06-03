@@ -10,6 +10,8 @@ public class Stage : MonoBehaviour
 
     public float rotationSpeed = 180f; // 回転速度（度/秒）
 
+    TrailRenderer pTrail;
+
     Quaternion targetRotation;
     public bool isRotating = false;
 
@@ -18,6 +20,7 @@ public class Stage : MonoBehaviour
         player = GameObject.Find("Player");
         if (player != null)
         {
+            pTrail = player.GetComponent<TrailRenderer>();
             playerS = player.GetComponent<Player>();
         }
         targetRotation = transform.rotation; // 初期回転
@@ -38,6 +41,8 @@ public class Stage : MonoBehaviour
 
         if (isRotating)
         {
+            if (pTrail != null) pTrail.enabled = false;
+
             transform.rotation = Quaternion.RotateTowards(
                 transform.rotation,
                 targetRotation,
@@ -49,6 +54,10 @@ public class Stage : MonoBehaviour
                 transform.rotation = targetRotation;
                 isRotating = false;
             }
+        }
+        else
+        {
+            if (pTrail != null) pTrail.enabled = true;
         }
     }
 

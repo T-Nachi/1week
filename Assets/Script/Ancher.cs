@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Ancher : MonoBehaviour
@@ -88,23 +89,25 @@ public class Ancher : MonoBehaviour
         if (playerRb == null) yield break;
 
         int frameCount = 0;
-        int maxFrames = Mathf.RoundToInt(0.5f / Time.fixedDeltaTime); 
+        int maxFrames = Mathf.RoundToInt(0.5f / Time.fixedDeltaTime);
 
-        while (Vector2.Distance(player.position, transform.position) > 0.1f)
+        if (player != null)
         {
-            Vector2 pullDir = (transform.position - player.position).normalized;
-            playerRb.velocity = pullDir * pullSpeed;
-
-            frameCount++;
-            if (frameCount > maxFrames)
+            while (Vector2.Distance(player.position, transform.position) > 0.1f)
             {
-                Debug.Log("時間切れでアンカーを破壊");
-                break;
+                Vector2 pullDir = (transform.position - player.position).normalized;
+                playerRb.velocity = pullDir * pullSpeed;
+
+                frameCount++;
+                if (frameCount > maxFrames)
+                {
+                    Debug.Log("時間切れでアンカーを破壊");
+                    break;
+                }
+
+                yield return new WaitForFixedUpdate();
             }
-
-            yield return new WaitForFixedUpdate();
         }
-
         playerRb.velocity = Vector2.zero;
         Destroy(gameObject);
 

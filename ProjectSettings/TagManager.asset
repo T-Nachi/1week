@@ -10,6 +10,7 @@ TagManager:
   - Arrow
   - EBullet
   - KillEnemy
+  - Goal
   layers:
   - Default
   - TransparentFX

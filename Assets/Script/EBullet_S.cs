@@ -75,7 +75,7 @@ public class EBullet_S : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag != "Enemy" && collision.gameObject.tag != "Arrow")
+        if (collision.gameObject.tag != "Enemy" && collision.gameObject.tag != "Arrow" && collision.gameObject.tag != "Goal")
         {
             Destroy(gameObject);
         }

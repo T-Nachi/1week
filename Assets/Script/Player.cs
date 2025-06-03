@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     bool isAim;
     public bool isShoot;
     public bool isRotate;
+    public bool isReset;
 
     //ÉpÉâÉÅÅ[É^
     public float moveSpeed;
@@ -194,6 +195,12 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void Input_Reset(InputAction.CallbackContext context)
+    {
+        bool Trigger = context.performed;
+        isReset = Trigger;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("EBullet") && collision.transform.position.y < transform.position.y)
@@ -206,12 +213,12 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            Instantiate(particle, transform.position, Quaternion.identity);
+            Instantiate(particle, transform.position, Quaternion.identity,stage.transform);
             Destroy(gameObject);
         }
         if (collision.gameObject.tag == "KillEnemy")
         {
-            Instantiate(particleE, collision.transform.position, Quaternion.identity);
+            Instantiate(particleE, transform.position, Quaternion.identity,stage.transform);
             rb.velocity = new Vector2(rb.velocity.x, jumpPower / 2);
         }
     }

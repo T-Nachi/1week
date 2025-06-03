@@ -116,13 +116,15 @@ public class Ancher : MonoBehaviour
     private IEnumerator ReturnToPlayer()
     {
         returning = true;
-        while (Vector2.Distance(transform.position, player.position) > 0.5f)
+        if (player != null)
         {
-            Vector2 dir = ((Vector2)player.position - rb.position).normalized;
-            rb.velocity = dir * speed;
-            yield return null;
+            while (Vector2.Distance(transform.position, player.position) > 0.5f)
+            {
+                Vector2 dir = ((Vector2)player.position - rb.position).normalized;
+                rb.velocity = dir * speed;
+                yield return null;
+            }
         }
-
         Destroy(gameObject);
     }
 }

@@ -19,8 +19,8 @@ public class Ancher : MonoBehaviour
     private bool hitSomething = false;
     private bool returning = false;
     private Rigidbody2D rb;
-    int count;
 
+    private LineRenderer line;
 
     void Start()
     {
@@ -28,7 +28,15 @@ public class Ancher : MonoBehaviour
         isShoot = false;
         isMove = false;
         rb = GetComponent<Rigidbody2D>();
+        line = GetComponent<LineRenderer>();
+
+        if (line != null)
+        {
+            line.positionCount = 2;
+            line.enabled = false;
+        }
     }
+
 
     void FixedUpdate()
     {
@@ -49,7 +57,7 @@ public class Ancher : MonoBehaviour
                 isMove = true;
             }
 
-            if (!hitSomething && !returning && Vector2.Distance(startPosition, transform.position) >= maxDistance)
+            if (!isHit && !hitSomething && !returning && Vector2.Distance(startPosition, transform.position) >= maxDistance)
             {
                 // –ß‚éˆ—‚ÖˆÚs
                 StartCoroutine(ReturnToPlayer());
@@ -63,6 +71,18 @@ public class Ancher : MonoBehaviour
             rb.velocity = Vector2.zero;
             StartCoroutine(PullPlayerToPoint());
             isHit = false;
+        }
+
+        // LineRenderer‚ÌXV
+        if (isShoot && line != null)
+        {
+            line.enabled = true;
+            line.SetPosition(0, transform.position);
+            line.SetPosition(1, player.position);
+        }
+        else if (line != null)
+        {
+            line.enabled = false;
         }
 
     }

@@ -56,11 +56,19 @@ public class SceneManeger : MonoBehaviour
     {
         if (cameraPivot != null) return;
 
+        // 左下のワールド座標を取得（nearClipPlane ではなくカメラ位置からの距離で）
+        Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, mainCamera.transform.position.z * -1));
+
+        // ピボット作成（左下を回転の軸に）
         cameraPivot = new GameObject("CameraPivot");
-        cameraPivot.transform.position = mainCamera.transform.position;
+        cameraPivot.transform.position = bottomLeft;
         DontDestroyOnLoad(cameraPivot);
-        mainCamera.transform.SetParent(cameraPivot.transform, true);
+
+        // カメラのワールド位置とピボットの差分をローカルに変換
+        mainCamera.transform.SetParent(cameraPivot.transform);
+        mainCamera.transform.localPosition = mainCamera.transform.position - bottomLeft;
     }
+
 
     public void Retry()
     {

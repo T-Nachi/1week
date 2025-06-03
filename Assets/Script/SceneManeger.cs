@@ -30,10 +30,18 @@ public class SceneManeger : MonoBehaviour
         if (comingFromRetry)
         {
             cameraPivot.transform.rotation = Quaternion.Euler(0, 0, 180f);
-            StartCoroutine(DelayedRotateBack());
-            comingFromRetry = false;
+            StartCoroutine(DelayedRotateBackAndResetFlag());
         }
+
     }
+
+    private IEnumerator DelayedRotateBackAndResetFlag()
+    {
+        yield return null;
+        yield return RotateOverTime(180f, rotationDuration);
+        comingFromRetry = false; // ← 回転が終わったあとにフラグを戻す！
+    }
+
 
     void Update()
     {
@@ -131,13 +139,15 @@ public class SceneManeger : MonoBehaviour
     private IEnumerator ZoomToGoalAndLoadNextScene()
     {
         Vector3 startPos = cameraPivot.transform.position;
+
+        // ゴールのワールド座標をそのまま使う（親の回転も無視）
         Vector3 targetPos = goal.transform.position;
-        targetPos.z = startPos.z;
+        targetPos.z = startPos.z; // Z座標だけcameraPivotに合わせる
 
         float moveDuration = 1.0f;
         float zoomDuration = 1.0f;
 
-        // ゴールに寄る
+        // カメラ移動（寄る）
         float elapsed = 0f;
         while (elapsed < moveDuration)
         {
@@ -147,9 +157,9 @@ public class SceneManeger : MonoBehaviour
             yield return null;
         }
 
-        // ズームイン
+        // ズームイン（視野を狭める）
         float startSize = mainCamera.orthographicSize;
-        float targetSize = 0.3f; // より狭くズーム
+        float targetSize = 0.3f;
         elapsed = 0f;
         while (elapsed < zoomDuration)
         {
@@ -159,9 +169,12 @@ public class SceneManeger : MonoBehaviour
             yield return null;
         }
 
-        // 次のシーンへ（インデックスで遷移）
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
+
+
+
+
 
     private void OnDestroy()
     {

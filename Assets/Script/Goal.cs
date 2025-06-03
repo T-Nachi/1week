@@ -63,6 +63,9 @@ public class Goal : MonoBehaviour
         {
             spriteRenderer.color = new Color(0.5f, 0.5f, 0.5f);
         }
+
+        Debug.Log(transform.position);
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

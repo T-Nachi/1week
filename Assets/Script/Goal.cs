@@ -76,4 +76,15 @@ public class Goal : MonoBehaviour
         }
     }
 
+    public Vector3 GetPositionIgnoringParentRotation()
+    {
+        if (transform.parent == null)
+            return transform.position;
+
+        Transform parent = transform.parent;
+        Vector3 localPos = transform.localPosition;
+        Vector3 scaledLocalPos = Vector3.Scale(localPos, parent.localScale);
+        Vector3 unrotatedLocalPos = Quaternion.Inverse(parent.rotation) * scaledLocalPos;
+        return parent.position + unrotatedLocalPos;
+    }
 }

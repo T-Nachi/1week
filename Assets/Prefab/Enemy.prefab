@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -9215891301823300162}
   m_Layer: 3
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -160,6 +160,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 6710347745773044200, guid: 6f2c4783465c03745b313adcdfe737c2, type: 3}
-  fireInterval: 50
-  shootDirection: 3
+  fireInterval: 120
+  shootDirection: 2
   offset: 1

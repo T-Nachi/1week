@@ -5,7 +5,8 @@ using UnityEngine.Rendering.Universal;
 public class Vignette : MonoBehaviour
 {
     public bool triggerVignette = false; 
-    public float intensityValue = 0.5f;  
+    public float maxIntensityValue = 0.5f;
+    public float valueSpeed = 0.02f;
 
     private Volume volume;
     private UnityEngine.Rendering.Universal.Vignette vignette;
@@ -25,15 +26,27 @@ public class Vignette : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (triggerVignette && vignette != null)
         {
             vignette.intensity.overrideState = true;
-            vignette.intensity.value = intensityValue;
-
-            
-            triggerVignette = false;
+            vignette.intensity.value += valueSpeed;
+            if (vignette.intensity.value >= maxIntensityValue)
+            {
+                vignette.intensity.value = maxIntensityValue;
+            }
         }
+
+        if (!triggerVignette && vignette != null)
+        {
+            vignette.intensity.value -= valueSpeed;
+            if (vignette.intensity.value <= 0)
+            {
+                vignette.intensity.overrideState = false;
+                vignette.intensity.value = 0;
+            }
+        }
+
     }
 }

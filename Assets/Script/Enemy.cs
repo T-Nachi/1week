@@ -8,13 +8,14 @@ public class Enemy : MonoBehaviour
     public int fireInterval = 50;
 
     public enum Direction { Up, Down, Left, Right }
-    public Direction shootDirection = Direction.Right; // Inspectorで選べる
+    public Direction shootDirection = Direction.Right;
 
-    public float offset; 
+    public float offset;
 
     private int fireCounter = 0;
 
     Transform stage;
+
     private void Start()
     {
         stage = GameObject.Find("Stage").transform;
@@ -34,24 +35,26 @@ public class Enemy : MonoBehaviour
     void Shoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity, stage);
-        Vector2 dir = Vector2.right;
 
+        // ローカル方向で弾を撃つ（ステージの回転を考慮しない）
+        Vector2 localDirection = Vector2.right;
         switch (shootDirection)
         {
             case Direction.Up:
-                dir = Vector2.up;
+                localDirection = Vector2.up;
                 break;
             case Direction.Down:
-                dir = Vector2.down;
+                localDirection = Vector2.down;
                 break;
             case Direction.Left:
-                dir = Vector2.left;
+                localDirection = Vector2.left;
                 break;
             case Direction.Right:
-                dir = Vector2.right;
+                localDirection = Vector2.right;
                 break;
         }
 
-        bullet.GetComponent<EBullet_S>().SetDirection(dir);
+        // ローカル方向のまま渡す（弾側で親の回転を使って処理する）
+        bullet.GetComponent<EBullet_S>().SetDirection(localDirection);
     }
 }

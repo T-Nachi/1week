@@ -73,11 +73,11 @@ public class Stage : MonoBehaviour
         }
         else if (dir == Vector2.down)
         {
-            newZ = 0f;
+            newZ += 0f;
         }
         else if (dir == Vector2.up)
         {
-            newZ = 180f;
+            newZ += 180f;
         }
 
         // 角度を0〜360に収める（省略しても動くが安定のため）

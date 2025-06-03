@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class Player : MonoBehaviour
 {
@@ -23,10 +24,15 @@ public class Player : MonoBehaviour
     float defGravity;
 
     //他オブジェクト情報
+    private Volume volume;
+    Vignette vignetteS;
     public LayerMask groundLayer;
     public GameObject AnchorPrefab;
     GameObject anchor;
     Transform stage;
+    private Rigidbody2D standingOnRb;
+
+
 
     Rigidbody2D rb;
 
@@ -34,6 +40,8 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        volume = GameObject.Find("Vinnet").GetComponent<Volume>();
+        if (volume != null) { vignetteS = volume.GetComponent<Vignette>(); }
         stage = GameObject.Find("Stage").transform;
         rb = GetComponent<Rigidbody2D>();
         defGravity = rb.gravityScale;
@@ -43,12 +51,20 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         GroundInfo();
+
+        if (standingOnRb != null)
+        {
+            // 動く床（弾）の速度をプレイヤーの位置に反映（Time.fixedDeltaTimeで補正）
+            rb.position += standingOnRb.velocity * Time.fixedDeltaTime;
+        }
+
         if (!isShoot)
         {
             if (isGround && inputDir == Vector2.down) inputDir = Vector2.zero;
             rb.gravityScale = defGravity;
             if (inputDir != Vector2.zero) aimDir = inputDir;
             if (isAim) Aim();
+            else { if (vignetteS != null) { vignetteS.triggerVignette = false; } }
             Move();
             Jump();
         }
@@ -57,6 +73,7 @@ public class Player : MonoBehaviour
             Shoot();
         }
     }
+
 
     private void Move()
     {
@@ -76,10 +93,15 @@ public class Player : MonoBehaviour
     {
 
         if (!isGround)
+        {
             Time.timeScale = 0.3f;
+            if (vignetteS != null) { vignetteS.triggerVignette = true; }
+        }
         else
+        {
             Time.timeScale = 1f;
-
+            if (vignetteS != null) { vignetteS.triggerVignette = false; }
+        }
         float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
 
         // 回転を設定
@@ -163,7 +185,21 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("EBullet"))
+        {
+            standingOnRb = collision.gameObject.GetComponent<Rigidbody2D>();
+        }
+    }
 
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("EBullet"))
+        {
+            standingOnRb = null;
+        }
+    }
 
 
 }

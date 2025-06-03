@@ -172,8 +172,14 @@ public class SceneManeger : MonoBehaviour
         // 3. 必要なら少し待ってから次シーンへ遷移
         yield return new WaitForSeconds(0.5f);
 
-        // 次のシーンをロード（シーン名を適宜変更してください）
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        if (SceneManager.GetActiveScene().buildIndex < 10)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+        else
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 
     private void OnDestroy()
